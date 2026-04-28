@@ -2,7 +2,7 @@
 
 Recurso interativo para pais e encarregados de educação.
 
-Desenvolvido por Ana Margarida Fonseca a 28.04.2026
+Desenvolvido por Ana Margarida Fonseca
 AEI8 PALDIM | TEIP4 do AEFP
 
 Temas:
