@@ -1,2 +1,12 @@
 # ia-em-familia
-Recurso interativo para famílias sobre IA, literacia digital e segurança online no âmbito da AEI8 PALDIM (TEIP4).
+
+Recurso interativo para pais e encarregados de educação.
+
+Desenvolvido por Ana Margarida Fonseca a 28.04.2026
+AEI8 PALDIM | TEIP4 do AEFP
+
+Temas:
+- IA e aprendizagens
+- literacia da informação
+- segurança digital
+- apoio às famílias
