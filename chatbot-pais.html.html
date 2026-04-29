@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Assistente IA em Família — Guia para Pais</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --teal-dark:   #1e3f50;
+      --teal-mid:    #2a6478;
+      --teal-light:  #3a9a8a;
+      --teal-pale:   #e8f4f0;
+      --teal-pale2:  #d0eae4;
+      --yellow:      #f5c518;
+      --yellow-dark: #d4a800;
+      --navy:        #1a2d3d;
+      --white:       #ffffff;
+      --page-bg:     #eef7f4;
+      --card-bg:     #ffffff;
+      --text:        #1a2d3d;
+      --text-muted:  #4a6070;
+      --text-faint:  #8aabb8;
+      --border:      #d0e4df;
+      --radius-sm:   0.5rem;
+      --radius-md:   0.875rem;
+      --radius-lg:   1.25rem;
+      --radius-xl:   1.75rem;
+      --shadow:      0 4px 20px rgba(30,63,80,0.10);
+      --shadow-lg:   0 8px 40px rgba(30,63,80,0.18);
+      --transition:  200ms cubic-bezier(0.16,1,0.3,1);
+      --font: 'Nunito', 'Segoe UI', system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--page-bg);
+      color: var(--text);
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── TOP BAR ── */
+    .top-bar {
+      background: var(--teal-dark);
+      color: white;
+      text-align: center;
+      padding: 0.55rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    .top-bar span { color: var(--yellow); }
+
+    /* ── LAYOUT ── */
+    .app {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      max-width: 780px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 0;
+      gap: 1rem;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--teal-dark);
+      border-radius: var(--radius-xl);
+      padding: 1.75rem 2rem 1.5rem;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -50px; right: -50px;
+      width: 180px; height: 180px; border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+    }
+    .hero::after {
+      content: '';
+      position: absolute; bottom: -30px; left: -30px;
+      width: 120px; height: 120px; border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+    .hero-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--yellow);
+      color: var(--navy);
+      font-size: 0.65rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.7rem;
+      border-radius: 9999px;
+      margin-bottom: 0.6rem;
+      width: fit-content;
+    }
+    .hero h1 {
+      font-size: clamp(1.3rem, 4vw, 1.9rem);
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 0.4rem;
+      position: relative;
+      z-index: 1;
+    }
+    .hero h1 .hl { color: var(--yellow); }
+    .hero p {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.8);
+      line-height: 1.55;
+      max-width: 50ch;
+      position: relative;
+      z-index: 1;
+    }
+    .avatar-wrap {
+      flex-shrink: 0;
+      width: 56px; height: 56px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── CHAT WINDOW ── */
+    .chat-outer {
+      background: var(--card-bg);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem 1.25rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      scroll-behavior: smooth;
+      min-height: 340px;
+      max-height: 460px;
+    }
+    .chat-messages::-webkit-scrollbar { width: 5px; }
+    .chat-messages::-webkit-scrollbar-track { background: transparent; }
+    .chat-messages::-webkit-scrollbar-thumb { background: var(--teal-pale2); border-radius: 9999px; }
+
+    /* ── MESSAGES ── */
+    .msg {
+      display: flex;
+      gap: 0.65rem;
+      align-items: flex-end;
+      animation: msgIn 0.22s ease forwards;
+    }
+    @keyframes msgIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Bot messages */
+    .msg.bot { justify-content: flex-start; }
+    .bot-avatar {
+      flex-shrink: 0;
+      width: 32px; height: 32px;
+      background: var(--teal-dark);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem;
+      color: white;
+      margin-bottom: 2px;
+    }
+    .msg.bot .bubble {
+      background: var(--teal-pale);
+      color: var(--text);
+      border-radius: var(--radius-lg) var(--radius-lg) var(--radius-lg) 4px;
+      padding: 0.85rem 1.05rem;
+      max-width: 82%;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* User messages */
+    .msg.user { justify-content: flex-end; }
+    .msg.user .bubble {
+      background: var(--teal-dark);
+      color: white;
+      border-radius: var(--radius-lg) var(--radius-lg) 4px var(--radius-lg);
+      padding: 0.75rem 1rem;
+      max-width: 72%;
+      font-size: 0.9rem;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    /* Bubble content elements */
+    .bubble strong { font-weight: 800; }
+    .bubble em { font-style: normal; color: var(--teal-mid); font-weight: 700; }
+    .bubble ul { padding-left: 1.1rem; margin: 0.4rem 0 0.2rem; }
+    .bubble li { margin-bottom: 0.25rem; }
+    .bubble .source-tag {
+      display: inline-block;
+      margin-top: 0.65rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--teal-mid);
+      background: white;
+      border: 1.5px solid var(--teal-pale2);
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+    }
+    .bubble .source-tag a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .bubble .source-tag a:hover { text-decoration: underline; }
+
+    /* Typing indicator */
+    .typing-dots {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      padding: 0.3rem 0;
+    }
+    .typing-dots span {
+      width: 7px; height: 7px;
+      background: var(--teal-light);
+      border-radius: 50%;
+      animation: bounce 1.2s infinite;
+    }
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
+      40% { transform: translateY(-5px); opacity: 1; }
+    }
+
+    /* ── TOPIC PILLS ── */
+    .topics-area {
+      padding: 0.85rem 1.25rem 0;
+      border-top: 1.5px solid var(--border);
+    }
+    .topics-label {
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 0.55rem;
+    }
+    .topics-scroll {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      padding-bottom: 0.75rem;
+    }
+    .topic-btn {
+      background: var(--teal-pale);
+      color: var(--teal-dark);
+      border: 1.5px solid transparent;
+      border-radius: 9999px;
+      padding: 0.38rem 0.85rem;
+      font-family: var(--font);
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background var(--transition), border-color var(--transition), transform var(--transition);
+      white-space: nowrap;
+    }
+    .topic-btn:hover {
+      background: var(--teal-pale2);
+      border-color: var(--teal-light);
+      transform: translateY(-1px);
+    }
+    .topic-btn.active {
+      background: var(--teal-dark);
+      color: white;
+    }
+
+    /* Sub-questions */
+    .subqs-area {
+      padding: 0 1.25rem 0.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      border-top: 1px solid var(--border);
+      padding-top: 0.65rem;
+    }
+    .subq-btn {
+      background: white;
+      color: var(--navy);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.45rem 0.85rem;
+      font-family: var(--font);
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background var(--transition), border-color var(--transition), transform var(--transition);
+      text-align: left;
+      line-height: 1.35;
+    }
+    .subq-btn:hover {
+      background: var(--teal-pale);
+      border-color: var(--teal-light);
+      transform: translateY(-1px);
+    }
+
+    /* ── INPUT BAR ── */
+    .input-area {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.85rem 1.25rem 1.1rem;
+      border-top: 1.5px solid var(--border);
+    }
+    .input-field {
+      flex: 1;
+      border: 1.5px solid var(--border);
+      border-radius: 9999px;
+      padding: 0.65rem 1.1rem;
+      font-family: var(--font);
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      background: var(--teal-pale);
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .input-field::placeholder { color: var(--text-faint); }
+    .input-field:focus {
+      border-color: var(--teal-light);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(58,154,138,0.12);
+    }
+    .send-btn {
+      flex-shrink: 0;
+      width: 40px; height: 40px;
+      background: var(--teal-dark);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+      font-size: 1rem;
+    }
+    .send-btn:hover { background: var(--teal-mid); transform: scale(1.05); }
+
+    /* ── FOOTER ── */
+    .chat-footer {
+      text-align: center;
+      color: var(--text-faint);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0 1rem 1.25rem;
+      flex-shrink: 0;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 520px) {
+      .hero { padding: 1.5rem 1.25rem 1.25rem; }
+      .chat-messages { max-height: 340px; }
+      .topics-scroll { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 0.75rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <span>IA em Família</span> — Agrupamento de Escolas Fernão do Fó · AEI8 – PALDIM | TEIP4
+  </div>
+
+  <div class="app">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-top">
+        <div>
+          <div class="hero-badge">✦ Assistente para Pais</div>
+          <h1>Guia <span class="hl">IA</span><br>em Família</h1>
+          <p>Coloque as suas dúvidas sobre Inteligência Artificial, segurança digital e como acompanhar os seus filhos.</p>
+        </div>
+        <div class="avatar-wrap">🤖</div>
+      </div>
+    </div>
+
+    <!-- CHAT WINDOW -->
+    <div class="chat-outer">
+      <div class="chat-messages" id="chat-messages">
+        <!-- Initial bot message rendered by JS -->
+      </div>
+
+      <!-- Topics -->
+      <div class="topics-area">
+        <div class="topics-label">Escolha um tema</div>
+        <div class="topics-scroll" id="topics-bar"></div>
+      </div>
+
+      <!-- Sub-questions -->
+      <div class="subqs-area" id="subqs-area" style="display:none"></div>
+
+      <!-- Input -->
+      <div class="input-area">
+        <input
+          class="input-field"
+          id="user-input"
+          type="text"
+          placeholder="Escreva a sua pergunta aqui…"
+          autocomplete="off"
+          maxlength="200"
+          onkeydown="handleKey(event)"
+        />
+        <button class="send-btn" onclick="handleSend()" aria-label="Enviar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="chat-footer">
+      As respostas baseiam-se em fontes de referência especializadas · Professora e formadora Ana Margarida Fonseca
+    </div>
+
+  </div>
+
+  <script>
+  // ═══════════════════════════════════════════════════════════
+  // KNOWLEDGE BASE
+  // ═══════════════════════════════════════════════════════════
+  const KB = {
+    topics: [
+      { id: "o-que-e-ia",    label: "🤖 O que é a IA?" },
+      { id: "mitos",         label: "💡 Mitos sobre IA" },
+      { id: "orientar",      label: "🗣️ Orientar os filhos" },
+      { id: "seguranca",     label: "🔒 Segurança digital" },
+      { id: "escola",        label: "🎓 IA na escola" },
+      { id: "conversa",      label: "💬 Como conversar" },
+    ],
+
+    questions: {
+      "o-que-e-ia": [
+        {
+          q: "O que é a Inteligência Artificial?",
+          a: `A <strong>Inteligência Artificial (IA)</strong> é um conjunto de tecnologias que permite às máquinas realizar tarefas que normalmente requerem inteligência humana — como compreender linguagem, reconhecer imagens ou gerar texto.<br><br>
+A IA <em>generativa</em> (como o ChatGPT, Gemini ou Copilot) aprende padrões a partir de enormes quantidades de dados e gera respostas, textos, imagens ou código. <strong>Não pensa, não sente e não tem consciência</strong> — processa estatísticas de linguagem de forma muito sofisticada.<br><br>
+Uma boa analogia: é como um espelho muito inteligente que reflete o que a humanidade já escreveu, organizado e filtrado.`,
+          sources: [
+            { label: "UNESCO — IA na Educação", url: "https://www.unesco.org/en/digital-education/artificial-intelligence" },
+            { label: "Council of Europe — AI Literacy", url: "https://www.coe.int/en/web/artificial-intelligence" }
+          ]
+        },
+        {
+          q: "Quais são os exemplos de IA que os jovens usam?",
+          a: `Os jovens portugueses utilizam IA sobretudo através de:<br><br>
+<ul>
+  <li><strong>ChatGPT / Gemini / Copilot</strong> — para trabalhos escolares, dúvidas, escrita</li>
+  <li><strong>TikTok e Instagram</strong> — os algoritmos que sugerem conteúdo são IA</li>
+  <li><strong>Assistentes de voz</strong> — Siri, Google Assistant, Alexa</li>
+  <li><strong>Filtros e efeitos de câmara</strong> — reconhecimento facial por IA</li>
+  <li><strong>Plataformas de jogos</strong> — personagens e dificuldade adaptada por IA</li>
+  <li><strong>Spotify / YouTube</strong> — recomendações personalizadas por IA</li>
+</ul>
+<br>A maioria usa IA diariamente sem se aperceber — o que torna a literacia sobre ela ainda mais urgente.`,
+          sources: [
+            { label: "Common Sense Media — Teens & AI", url: "https://www.commonsensemedia.org/ai-in-education" },
+            { label: "Segurança Online — Portugal", url: "https://www.segurancaonline.gov.pt" }
+          ]
+        },
+        {
+          q: "A IA tem memória e aprende com o meu filho?",
+          a: `Depende da ferramenta. Na maioria das plataformas gratuitas (versão base do ChatGPT, por exemplo), <strong>a IA não guarda memória entre sessões diferentes</strong> — cada conversa começa do zero.<br><br>
+Contudo, algumas versões com conta registada <em>podem</em> aprender preferências ao longo do tempo. E sempre que o jovem usa a IA, os dados dessa conversa podem ser usados para <strong>melhorar os modelos</strong> da empresa, dependendo das políticas de privacidade.<br><br>
+📌 Dica: Verifique sempre as políticas de privacidade da plataforma e incentive o seu filho a não partilhar dados pessoais nas conversas com IA.`,
+          sources: [
+            { label: "CNPD — Proteção de Dados e IA", url: "https://www.cnpd.pt" },
+            { label: "OpenAI Privacy Policy", url: "https://openai.com/privacy" }
+          ]
+        }
+      ],
+
+      "mitos": [
+        {
+          q: "\"A IA diz sempre a verdade\"",
+          a: `<strong>Mito.</strong> Este é um dos equívocos mais perigosos.<br><br>
+A IA generativa pode <em>alucinar</em> — um termo técnico para quando gera informação falsa apresentada com grande confiança. Pode inventar:<br>
+<ul>
+  <li>Citações e referências bibliográficas inexistentes</li>
+  <li>Factos históricos errados</li>
+  <li>Notícias e estatísticas fabricadas</li>
+</ul>
+<br><strong>O que ensinar ao seu filho:</strong> "A IA é um ponto de partida, nunca o ponto final. Verifica sempre numa fonte fiável antes de usar ou partilhar."`,
+          sources: [
+            { label: "MIT Technology Review — AI Hallucinations", url: "https://www.technologyreview.com/2023/02/14/1068498/ai-chatbots-lie/" },
+            { label: "UNESCO — AI Competency Framework", url: "https://www.unesco.org/en/digital-education/artificial-intelligence" }
+          ]
+        },
+        {
+          q: "\"A IA vai substituir os professores\"",
+          a: `<strong>Mito.</strong> A IA é uma ferramenta de apoio à aprendizagem, não um substituto do educador.<br><br>
+O que um professor oferece e a IA não consegue replicar:<br>
+<ul>
+  <li>Relação humana, empatia e vínculo emocional</li>
+  <li>Conhecimento do aluno como pessoa individual</li>
+  <li>Gestão do ambiente de sala de aula</li>
+  <li>Julgamento pedagógico e adaptação em tempo real</li>
+  <li>Modelação de valores, cidadania e pensamento crítico</li>
+</ul>
+<br>A IA pode personalizar exercícios, fornecer explicações alternativas e libertar tempo dos professores — <em>amplificando</em> o ensino, não substituindo-o.`,
+          sources: [
+            { label: "OCDE — The Future of Education and AI", url: "https://www.oecd.org/education/ai-education.htm" },
+            { label: "DGE — IA e Educação em Portugal", url: "https://www.dge.mec.pt" }
+          ]
+        },
+        {
+          q: "\"Usar IA nos TPC é sempre batota\"",
+          a: `<strong>Nem sempre — depende de como é usada.</strong><br><br>
+<strong>É batota quando:</strong> o aluno pede à IA para fazer o trabalho e entrega sem ler, compreender ou acrescentar nada.<br><br>
+<strong>Não é batota quando:</strong> o aluno usa a IA para:<br>
+<ul>
+  <li>Compreender melhor um conceito difícil ("explica-me como se eu tivesse 15 anos")</li>
+  <li>Pedir feedback sobre o que já escreveu</li>
+  <li>Procurar fontes e depois verificá-las</li>
+  <li>Criar resumos e depois estudá-los ativamente</li>
+</ul>
+<br>📌 A questão não é <em>se</em> usa IA, mas <em>como</em> a usa. O pensamento tem de continuar a ser do aluno.`,
+          sources: [
+            { label: "Harvard Graduate School of Education — AI & Academic Integrity", url: "https://www.gse.harvard.edu/ideas/usable-knowledge/23/08/how-should-schools-respond-chatgpt" },
+            { label: "Common Sense Media — AI in Schools", url: "https://www.commonsensemedia.org/ai-in-education" }
+          ]
+        },
+        {
+          q: "\"A IA é perigosa e devo proibir o meu filho de usá-la\"",
+          a: `<strong>Mito — proibir sozinho não é a solução mais eficaz.</strong><br><br>
+A investigação em psicologia e educação digital mostra que:<br>
+<ul>
+  <li>Proibições sem diálogo aumentam a curiosidade e o uso escondido</li>
+  <li>Jovens que nunca aprenderem a usar IA de forma crítica ficam em desvantagem</li>
+  <li>A literacia digital — saber usar bem — é uma competência do século XXI</li>
+</ul>
+<br><strong>O que funciona melhor:</strong> regras claras, acordos em família, conversas abertas e ensino do uso responsável. A IA tem riscos — mas também tem imenso potencial quando bem orientada.`,
+          sources: [
+            { label: "Plano de Ação para a Literacia Digital — Portugal 2030", url: "https://www.portugal.gov.pt/pt/gc23/comunicacao/noticia?i=estrategia-nacional-para-a-competencias-digitais" },
+            { label: "eSafety Commissioner — AI & Young People", url: "https://www.esafety.gov.au/educators/classroom-resources/artificial-intelligence" }
+          ]
+        }
+      ],
+
+      "orientar": [
+        {
+          q: "Como sei se o meu filho está a usar bem a IA?",
+          a: `Alguns sinais de <em>uso saudável</em>:<br>
+<ul>
+  <li>Consegue explicar o que pesquisou com as suas próprias palavras</li>
+  <li>Faz perguntas sobre o que a IA respondeu ("mas será mesmo assim?")</li>
+  <li>Verifica a informação noutras fontes</li>
+  <li>Usa a IA como ferramenta, não como muleta</li>
+</ul>
+<br>Sinais de <em>uso problemático</em>:<br>
+<ul>
+  <li>Entrega trabalhos sem conseguir explicar o conteúdo</li>
+  <li>Aceita tudo o que a IA diz sem questionar</li>
+  <li>Usa a IA para evitar o esforço de pensar</li>
+  <li>Passa horas em plataformas de IA de forma compulsiva</li>
+</ul>`,
+          sources: [
+            { label: "Common Sense Media — Guia para Pais", url: "https://www.commonsensemedia.org/articles/parents-ultimate-guide-to-chatgpt" },
+            { label: "Internet Matters — AI Safety for Families", url: "https://www.internetmatters.org/issues/generative-ai-chatbots/" }
+          ]
+        },
+        {
+          q: "Que regras devo estabelecer em casa sobre a IA?",
+          a: `Sugestões para um <strong>Acordo Digital em Família</strong> sobre IA:<br><br>
+<ul>
+  <li>✅ Usar a IA para aprender, não para substituir o pensamento</li>
+  <li>✅ Verificar sempre a informação da IA noutra fonte</li>
+  <li>✅ Não partilhar dados pessoais (nome, escola, morada, fotos) nas conversas com IA</li>
+  <li>✅ Contar aos pais quando a IA diz algo estranho ou preocupante</li>
+  <li>✅ Não usar IA para criar conteúdo que engane outras pessoas</li>
+  <li>❌ Não entregar trabalhos feitos 100% por IA como se fossem seus</li>
+  <li>❌ Não usar IA durante o jantar, estudo ou horas de descanso</li>
+</ul>
+<br>📌 <strong>Importante:</strong> as regras funcionam melhor quando são criadas <em>em conjunto</em> com os filhos, não impostas.`,
+          sources: [
+            { label: "Internet Matters — Family Agreement on AI", url: "https://www.internetmatters.org/issues/generative-ai-chatbots/" },
+            { label: "Safer Internet Day — Recursos para Famílias", url: "https://www.saferinternetday.org" }
+          ]
+        },
+        {
+          q: "A que idade podem os jovens usar IA?",
+          a: `A maioria das plataformas de IA generativa (ChatGPT, Gemini, Copilot) tem como <strong>idade mínima 13 anos</strong> nos termos de serviço. Na União Europeia, o <em>AI Act</em> (regulamento europeu de IA, 2024) e o RGPD impõem proteções especiais para menores.<br><br>
+Na prática:<br>
+<ul>
+  <li><strong>Menos de 13 anos:</strong> uso apenas com supervisão ativa de adultos</li>
+  <li><strong>13–15 anos:</strong> uso com regras claras, acordos em família e conversas regulares</li>
+  <li><strong>16+ anos:</strong> autonomia progressiva com diálogo aberto</li>
+</ul>
+<br>A idade não é o único fator — a maturidade digital e o acompanhamento familiar são igualmente importantes.`,
+          sources: [
+            { label: "EU AI Act — Proteção de Menores", url: "https://artificialintelligenceact.eu" },
+            { label: "CNPD — RGPD e Menores", url: "https://www.cnpd.pt/home/rgpd/menores.htm" }
+          ]
+        },
+        {
+          q: "O meu filho quer usar IA para tudo. É preocupante?",
+          a: `Depende do contexto. Alguma curiosidade e entusiasmo com novas tecnologias é natural e saudável. Mas há sinais a observar:<br><br>
+<strong>Não é preocupante quando:</strong><br>
+<ul>
+  <li>É uma fase de descoberta e a aprendizagem continua a acontecer</li>
+  <li>O jovem usa a IA para explorar temas que o interessam</li>
+  <li>Mantém outras atividades e relações sociais</li>
+</ul>
+<br><strong>Pode ser preocupante quando:</strong><br>
+<ul>
+  <li>Substitui por completo o pensamento próprio e o esforço</li>
+  <li>Torna-se uma forma de evitar a frustração ou a dificuldade</li>
+  <li>Interfere com sono, relações sociais ou desempenho escolar</li>
+  <li>Existe uma dependência emocional de chatbots (ex: preferir "falar" com IA em vez de pessoas)</li>
+</ul>
+<br>Neste último caso, conversar abertamente e, se necessário, procurar apoio da psicologia escolar é o caminho.`,
+          sources: [
+            { label: "WHO — Screen Time & Mental Health", url: "https://www.who.int/news-room/fact-sheets/detail/adolescents-health-risks-and-solutions" },
+            { label: "Segurança Online — Bem-estar digital", url: "https://www.segurancaonline.gov.pt" }
+          ]
+        }
+      ],
+
+      "seguranca": [
+        {
+          q: "Que dados o meu filho não deve partilhar com a IA?",
+          a: `Regra de ouro: <strong>nunca fornecer dados que identifiquem a criança ou a família.</strong><br><br>
+<em>Nunca partilhar com plataformas de IA:</em><br>
+<ul>
+  <li>Nome completo, morada ou escola</li>
+  <li>Número de telefone, e-mail pessoal ou familiar</li>
+  <li>Fotos do rosto ou de familiares</li>
+  <li>Dados financeiros (cartões, números de conta)</li>
+  <li>Palavras-passe de qualquer serviço</li>
+  <li>Informação médica sensível</li>
+  <li>Localização em tempo real</li>
+</ul>
+<br>📌 As conversas com IA podem ser usadas para treinar modelos ou, em caso de violação de dados, ficar expostas. Menos dados = mais segurança.`,
+          sources: [
+            { label: "CNPD — Proteção de Dados Pessoais", url: "https://www.cnpd.pt" },
+            { label: "Internet Segura — Dicas para Famílias", url: "https://www.internetsegura.pt" }
+          ]
+        },
+        {
+          q: "O que são deepfakes e como proteger o meu filho?",
+          a: `<strong>Deepfakes</strong> são vídeos, imagens ou áudios falsos criados por IA que parecem reais. Podem mostrar pessoas a dizer ou fazer coisas que nunca fizeram.<br><br>
+<strong>Riscos para jovens:</strong><br>
+<ul>
+  <li>Criação de imagens ou vídeos íntimos falsificados (crime em Portugal desde 2023)</li>
+  <li>Bullying com imagens manipuladas</li>
+  <li>Desinformação e notícias falsas com figuras públicas</li>
+</ul>
+<br><strong>Como proteger:</strong><br>
+<ul>
+  <li>Contas de redes sociais em modo privado</li>
+  <li>Não publicar muitas fotos do rosto em alta resolução</li>
+  <li>Conversar sobre o que são deepfakes e como os reconhecer</li>
+  <li>Se acontecer algo: reportar à plataforma e, se necessário, à PSP/GNR (Lei n.º 83/2023)</li>
+</ul>`,
+          sources: [
+            { label: "APAV — Violência Online e Deepfakes", url: "https://apav.pt" },
+            { label: "Internet Segura — Centro de Recursos", url: "https://www.internetsegura.pt" },
+            { label: "Lei n.º 83/2023 — Imagens Íntimas Não Consentidas", url: "https://dre.pt/dre/detalhe/lei/83-2023-801384742" }
+          ]
+        },
+        {
+          q: "Como reconhecer desinformação gerada por IA?",
+          a: `A IA pode gerar texto, imagens e vídeos falsos muito convincentes. Ensine o seu filho a aplicar este <strong>checklist de verificação</strong>:<br><br>
+<ul>
+  <li>🔍 <strong>Verificar a fonte:</strong> quem publicou? É um meio jornalístico reconhecido?</li>
+  <li>📅 <strong>Verificar a data:</strong> a notícia é recente ou antiga partilhada fora de contexto?</li>
+  <li>🖼️ <strong>Verificar imagens:</strong> usar Google Imagens para pesquisa inversa</li>
+  <li>🔎 <strong>Verificar noutros sítios:</strong> outros meios noticiosos confirmam?</li>
+  <li>🤔 <strong>Questionar a emoção:</strong> se provoca raiva ou medo imediatos, desconfie</li>
+</ul>
+<br><strong>Ferramentas úteis em Portugal:</strong> Polígrafo, Observador Fact Check, Página da ERC.`,
+          sources: [
+            { label: "Polígrafo — Fact-checking Portugal", url: "https://poligrafo.sapo.pt" },
+            { label: "ERC — Literacia para os Media", url: "https://www.erc.pt/pt/literacia-para-os-media" },
+            { label: "First Draft — Verificação de Informação", url: "https://firstdraftnews.org" }
+          ]
+        },
+        {
+          q: "O que fazer se o meu filho receber conteúdo perturbador via IA?",
+          a: `Em primeiro lugar: <strong>não entre em pânico e não reaja com zanga</strong> — isso pode levar o jovem a esconder situações futuras.<br><br>
+<strong>O que fazer:</strong><br>
+<ul>
+  <li>Ouvir com calma e validar os sentimentos do filho</li>
+  <li>Fazer capturas de ecrã e guardar evidências</li>
+  <li>Reportar o conteúdo na plataforma onde apareceu</li>
+  <li>Se envolve conteúdo ilegal (ex: imagens de abuso): contactar a Internet Segura (linha 1455) ou a PSP</li>
+  <li>Se causou impacto emocional significativo: apoio da psicologia escolar ou clínica</li>
+</ul>
+<br>📌 A Internet Segura tem uma linha de apoio gratuita: <strong>1455</strong> (dias úteis, 9h-18h).`,
+          sources: [
+            { label: "Internet Segura — Linha de Apoio 1455", url: "https://www.internetsegura.pt/linha-de-apoio-1455" },
+            { label: "APAV — Apoio a Vítimas Online", url: "https://apav.pt" }
+          ]
+        }
+      ],
+
+      "escola": [
+        {
+          q: "O que a escola está a fazer em relação à IA?",
+          a: `Em Portugal, o Ministério da Educação tem vindo a integrar a IA na estratégia educativa através de:<br><br>
+<ul>
+  <li><strong>Plano de Ação para a Transição Digital (PATD)</strong> — inclui competências digitais e IA</li>
+  <li><strong>Currículo de Tecnologias de Informação</strong> — pensamento computacional e literacia digital</li>
+  <li><strong>Formação de professores</strong> — em literacia de IA e uso pedagógico responsável</li>
+  <li><strong>Projetos-piloto</strong> — integração de ferramentas de IA em contexto escolar</li>
+</ul>
+<br>A maioria das escolas está ainda em fase de definição de políticas — o que torna a participação e o diálogo entre escola e família especialmente importante neste momento.`,
+          sources: [
+            { label: "DGE — Tecnologia e Educação", url: "https://www.dge.mec.pt/tecnologias-e-informatica" },
+            { label: "OCDE — AI in Education Portugal", url: "https://www.oecd.org/pisa/publications/pisa-2022-results.htm" }
+          ]
+        },
+        {
+          q: "Devo falar com o professor se achar que o meu filho está a abusar da IA?",
+          a: `<strong>Sim — e é altamente recomendado.</strong><br><br>
+A comunicação escola-família é um dos fatores mais protectores no desenvolvimento digital saudável dos jovens.<br><br>
+<strong>Como abordar a conversa com o professor/diretor de turma:</strong><br>
+<ul>
+  <li>Apresente observações concretas (ex: "entreguei trabalho que não conseguia explicar")</li>
+  <li>Pergunte quais as orientações da escola sobre uso de IA nos trabalhos</li>
+  <li>Proponha colaboração: o que pode ser feito em casa e na escola em conjunto</li>
+  <li>Peça recursos ou formação se sentir que precisa de mais informação</li>
+</ul>
+<br>A escola não é adversária neste processo — é parceira.`,
+          sources: [
+            { label: "Harvard GSE — Families & AI Conversations", url: "https://www.gse.harvard.edu/ideas/usable-knowledge/23/08/how-should-schools-respond-chatgpt" },
+            { label: "DGE — Parceria Escola-Família", url: "https://www.dge.mec.pt" }
+          ]
+        },
+        {
+          q: "A IA pode ajudar alunos com necessidades educativas especiais?",
+          a: `<strong>Sim — este é um dos usos mais promissores da IA na educação.</strong><br><br>
+A IA pode apoiar alunos com NEE através de:<br>
+<ul>
+  <li><strong>Dislexia:</strong> leitura em voz alta, resumos, simplificação de textos</li>
+  <li><strong>PHDA:</strong> divisão de tarefas em passos pequenos, lembretes, estrutura visual</li>
+  <li><strong>Dificuldades de escrita:</strong> sugestões de organização, gramática, reformulação</li>
+  <li><strong>Autismo:</strong> prática de competências sociais em ambiente seguro, explicações literais</li>
+  <li><strong>Limitações visuais/auditivas:</strong> ferramentas de transcrição, síntese de voz, descrição de imagens</li>
+</ul>
+<br>📌 A IA deve complementar — nunca substituir — o apoio especializado de educadores e terapeutas.`,
+          sources: [
+            { label: "UNESCO — AI & Inclusive Education", url: "https://www.unesco.org/en/digital-education/artificial-intelligence" },
+            { label: "DGE — Educação Inclusiva", url: "https://www.dge.mec.pt/educacao-inclusiva" }
+          ]
+        }
+      ],
+
+      "conversa": [
+        {
+          q: "Como começar a falar de IA com o meu filho?",
+          a: `A melhor conversa começa com <strong>curiosidade genuína</strong>, não com regras ou avisos.<br><br>
+<strong>Perguntas de arranque que funcionam:</strong><br>
+<ul>
+  <li>"Já usaste algum assistente de IA? Mostra-me como funciona."</li>
+  <li>"Tenho curiosidade — como é que os teus colegas usam o ChatGPT?"</li>
+  <li>"Achas que a IA pode inventar coisas? Já te aconteceu?"</li>
+  <li>"Se pudesses criar uma IA para te ajudar, o que é que ela fazia?"</li>
+</ul>
+<br>📌 <strong>Evitar começar com:</strong> "Já sabes que usar IA nos TPC é batota, certo?" — isso fecha o diálogo antes de começar.`,
+          sources: [
+            { label: "Internet Matters — Talking to Your Child About AI", url: "https://www.internetmatters.org/issues/generative-ai-chatbots/" },
+            { label: "Common Sense Media — Family Conversation Starters", url: "https://www.commonsensemedia.org/articles/parents-ultimate-guide-to-chatgpt" }
+          ]
+        },
+        {
+          q: "O meu filho diz que sabe mais de IA do que eu. E agora?",
+          a: `Isso é <strong>possível — e não é um problema.</strong> É uma oportunidade.<br><br>
+Os jovens muitas vezes sabem <em>usar</em> as ferramentas com mais fluência. Os pais têm algo diferente e igualmente valioso: <strong>experiência de vida, julgamento crítico e contexto ético</strong>.<br><br>
+<strong>O que pode fazer:</strong><br>
+<ul>
+  <li>Pedir ao filho que lhe mostre como usa a IA — aprende-se muito a observar</li>
+  <li>Fazer perguntas do tipo "e achas que isso é sempre fiável?"</li>
+  <li>Partilhar perspectivas de adulto: "Eu preocupo-me com X porque..."</li>
+  <li>Aprender juntos — explorar uma ferramenta pela primeira vez em conjunto</li>
+</ul>
+<br>O objetivo não é saber mais do que o filho — é <em>pensar em conjunto</em> com ele.`,
+          sources: [
+            { label: "Common Sense Media — Parents & AI Literacy", url: "https://www.commonsensemedia.org/articles/parents-ultimate-guide-to-chatgpt" },
+            { label: "Safer Internet Day — Família Digital", url: "https://www.saferinternetday.org" }
+          ]
+        },
+        {
+          q: "Como falar de riscos sem assustar?",
+          a: `O equilíbrio está em ser <strong>honesto sem catastrofizar</strong>.<br><br>
+<strong>Em vez de dizer:</strong> "A internet está cheia de perigos e precisas de ter muito cuidado!"<br>
+<strong>Experimente dizer:</strong> "Há coisas na internet que podem confundir ou magoar — quero que saibas o que são para poderes reconhecê-las."<br><br>
+<strong>Princípios para falar de riscos com jovens:</strong><br>
+<ul>
+  <li>Ser concreto e específico, não vago e ameaçador</li>
+  <li>Focar em competências ("o que fazes se...") em vez de só nos riscos</li>
+  <li>Deixar claro que pode sempre contar ao pai/mãe sem ter medo de castigo</li>
+  <li>Normalizar que todos os adultos ainda estão a aprender sobre isto</li>
+</ul>`,
+          sources: [
+            { label: "Internet Matters — Talking About Online Risks", url: "https://www.internetmatters.org/issues/generative-ai-chatbots/" },
+            { label: "Segurança Online — Guia para Pais", url: "https://www.segurancaonline.gov.pt" }
+          ]
+        },
+        {
+          q: "Que recursos posso usar para aprender mais?",
+          a: `<strong>Recursos recomendados em português:</strong><br>
+<ul>
+  <li>📖 <strong>IA em Família</strong> — guia completo desta sessão: <a href="https://anafonseca.github.io/ia-em-familia/" target="_blank" style="color:var(--teal-mid)">anafonseca.github.io/ia-em-familia/</a></li>
+  <li>🔒 <strong>Internet Segura</strong> — recursos e linha de apoio 1455: <a href="https://www.internetsegura.pt" target="_blank" style="color:var(--teal-mid)">internetsegura.pt</a></li>
+  <li>🌐 <strong>Segurança Online</strong> — portal do governo para literacia digital: <a href="https://www.segurancaonline.gov.pt" target="_blank" style="color:var(--teal-mid)">segurancaonline.gov.pt</a></li>
+  <li>👨‍👩‍👧 <strong>Internet Matters</strong> (inglês) — guias para pais sobre IA: <a href="https://www.internetmatters.org/issues/generative-ai-chatbots/" target="_blank" style="color:var(--teal-mid)">internetmatters.org</a></li>
+  <li>📚 <strong>Common Sense Media</strong> (inglês) — avaliações e guias de ferramentas de IA: <a href="https://www.commonsensemedia.org/ai-in-education" target="_blank" style="color:var(--teal-mid)">commonsensemedia.org</a></li>
+</ul>`,
+          sources: []
+        }
+      ]
+    }
+  };
+
+  // ═══════════════════════════════════════════════════════════
+  // FUZZY MATCH — keyword-based lookup
+  // ═══════════════════════════════════════════════════════════
+  const keywordMap = [
+    { keys: ["o que é","o que e","o que sao","o que são","definição","definicao","conceito","significa","é a inteligência","inteligencia artificial","ia é"], topic: "o-que-e-ia", qi: 0 },
+    { keys: ["exemplos","usam","utilizam","tiktok","spotify","jogos","aplicações","apps","alexa","siri","assistent"], topic: "o-que-e-ia", qi: 1 },
+    { keys: ["memória","memoria","lembra","guardar","aprende","dados do meu"], topic: "o-que-e-ia", qi: 2 },
+    { keys: ["alucinação","alucinacao","verdade","mente","fia","mente","inventar","falsa","fiável","fiaveis","sempre certo","erros"], topic: "mitos", qi: 0 },
+    { keys: ["professor","professores","substitui","substituir","substituto","escola sem","fim da escola"], topic: "mitos", qi: 1 },
+    { keys: ["batota","tpc","trabalho de casa","trabalhos","colar","copiar","fazer por"], topic: "mitos", qi: 2 },
+    { keys: ["proibir","perigosa","proibição","proibicao","banir","bloquear","medo da ia"], topic: "mitos", qi: 3 },
+    { keys: ["usar bem","uso saudável","saudavel","sinais","como sei","bom uso"], topic: "orientar", qi: 0 },
+    { keys: ["regras","acordo","limites","contrato","normas","combinações","combinacoes"], topic: "orientar", qi: 1 },
+    { keys: ["idade","quantos anos","pode usar","mínimo","minimo","menor"], topic: "orientar", qi: 2 },
+    { keys: ["tudo","muito tempo","viciado","dependente","obcecado","passa horas","preocupante"], topic: "orientar", qi: 3 },
+    { keys: ["dados","partilhar","privacidade","pessoal","morada","foto","identidade","proteger dados"], topic: "seguranca", qi: 0 },
+    { keys: ["deepfake","fake","vídeo falso","imagem falsa","manipulado","falsificado"], topic: "seguranca", qi: 1 },
+    { keys: ["desinformação","desinformacao","noticia falsa","fake news","verificar","fact","mentira"], topic: "seguranca", qi: 2 },
+    { keys: ["conteúdo perturbador","conteudo","chocante","violento","pornografia","contacto estranha","denunciar","reportar"], topic: "seguranca", qi: 3 },
+    { keys: ["escola","politica","estão a fazer","medidas","dge","ministerio","governo"], topic: "escola", qi: 0 },
+    { keys: ["falar com professor","diretor de turma","comunicar","denunciar na escola","professora"], topic: "escola", qi: 1 },
+    { keys: ["nee","necessidades","especiais","dislexia","phda","autismo","inclusão","inclusao","apoio"], topic: "escola", qi: 2 },
+    { keys: ["começar conversa","comecar","iniciar","como falar","como abordar","como dizer"], topic: "conversa", qi: 0 },
+    { keys: ["sabe mais","sabe mais que eu","eu não sei","nao sei","ignoro","não percebo de"], topic: "conversa", qi: 1 },
+    { keys: ["assustar","medo","riscos","perigos","como explicar riscos","sem assustar"], topic: "conversa", qi: 2 },
+    { keys: ["recursos","aprender mais","onde","sites","livros","formação","formacao","referência","referencia"], topic: "conversa", qi: 3 },
+  ];
+
+  function findAnswer(text) {
+    const t = text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+    let best = null;
+    for (const entry of keywordMap) {
+      for (const k of entry.keys) {
+        if (t.includes(k)) {
+          best = entry;
+          break;
+        }
+      }
+      if (best) break;
+    }
+    if (best) {
+      const q = KB.questions[best.topic][best.qi];
+      return q;
+    }
+    return null;
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // UI HELPERS
+  // ═══════════════════════════════════════════════════════════
+  function scrollBottom() {
+    const el = document.getElementById('chat-messages');
+    el.scrollTop = el.scrollHeight;
+  }
+
+  function addMsg(role, html, isHTML = false) {
+    const el = document.getElementById('chat-messages');
+    const wrap = document.createElement('div');
+    wrap.className = `msg ${role}`;
+
+    if (role === 'bot') {
+      wrap.innerHTML = `
+        <div class="bot-avatar">✦</div>
+        <div class="bubble">${isHTML ? html : escHtml(html)}</div>
+      `;
+    } else {
+      wrap.innerHTML = `<div class="bubble">${isHTML ? html : escHtml(html)}</div>`;
+    }
+    el.appendChild(wrap);
+    scrollBottom();
+    return wrap;
+  }
+
+  function escHtml(t) {
+    return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function buildBotContent(q) {
+    let html = q.a;
+    if (q.sources && q.sources.length) {
+      html += '<br>';
+      q.sources.forEach(s => {
+        html += `<span class="source-tag">📎 <a href="${s.url}" target="_blank" rel="noopener">${s.label}</a></span> `;
+      });
+    }
+    return html;
+  }
+
+  function showTyping() {
+    const el = document.getElementById('chat-messages');
+    const wrap = document.createElement('div');
+    wrap.className = 'msg bot';
+    wrap.id = 'typing-indicator';
+    wrap.innerHTML = `
+      <div class="bot-avatar">✦</div>
+      <div class="bubble">
+        <div class="typing-dots"><span></span><span></span><span></span></div>
+      </div>`;
+    el.appendChild(wrap);
+    scrollBottom();
+  }
+
+  function removeTyping() {
+    const t = document.getElementById('typing-indicator');
+    if (t) t.remove();
+  }
+
+  function botReply(q, delay = 800) {
+    showTyping();
+    setTimeout(() => {
+      removeTyping();
+      addMsg('bot', buildBotContent(q), true);
+      // Show follow-up subquestions from same topic
+      const related = KB.questions[getTopicForQ(q)];
+      if (related) showSubqs(related, q);
+    }, delay);
+  }
+
+  function getTopicForQ(q) {
+    for (const [topicId, qs] of Object.entries(KB.questions)) {
+      if (qs.includes(q)) return topicId;
+    }
+    return null;
+  }
+
+  function fallbackReply() {
+    showTyping();
+    setTimeout(() => {
+      removeTyping();
+      const msg = `Não encontrei uma resposta exata para essa pergunta. Tente escolher um dos <strong>temas</strong> abaixo ou reformule a pergunta. Por exemplo: "O que é a IA?", "Como falar com o meu filho?" ou "Que dados não deve partilhar?"`;
+      addMsg('bot', msg, true);
+    }, 600);
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // TOPICS & SUBQUESTIONS
+  // ═══════════════════════════════════════════════════════════
+  let activeTopicId = null;
+
+  function renderTopics() {
+    const bar = document.getElementById('topics-bar');
+    KB.topics.forEach(t => {
+      const btn = document.createElement('button');
+      btn.className = 'topic-btn';
+      btn.textContent = t.label;
+      btn.dataset.id = t.id;
+      btn.onclick = () => selectTopic(t.id, btn, t.label);
+      bar.appendChild(btn);
+    });
+  }
+
+  function selectTopic(id, btn, label) {
+    // Toggle active
+    document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeTopicId = id;
+
+    // User message
+    addMsg('user', label);
+
+    // Show subquestions
+    const qs = KB.questions[id];
+    showSubqs(qs, null);
+
+    // Bot reply
+    showTyping();
+    setTimeout(() => {
+      removeTyping();
+      const intro = topicIntros[id] || `Aqui estão as perguntas mais frequentes sobre este tema:`;
+      addMsg('bot', intro, true);
+    }, 500);
+  }
+
+  const topicIntros = {
+    "o-que-e-ia":  `Ótima escolha! Compreender o que é a IA é o primeiro passo para a orientar bem. Escolha uma pergunta:`,
+    "mitos":       `Há muitos mitos sobre IA que importa desmistificar. O que quer clarificar?`,
+    "orientar":    `Orientar os filhos no uso da IA é uma das tarefas mais importantes dos pais hoje. Selecione uma questão:`,
+    "seguranca":   `A segurança digital começa em casa. Que aspeto quer explorar?`,
+    "escola":      `A escola e a família são parceiros neste processo. O que quer saber?`,
+    "conversa":    `Conversar abertamente é a melhor ferramenta. Que dúvida tem?`,
+  };
+
+  function showSubqs(qs, excludeQ) {
+    const area = document.getElementById('subqs-area');
+    area.innerHTML = '';
+    const toShow = qs.filter(q => q !== excludeQ);
+    if (!toShow.length) { area.style.display = 'none'; return; }
+    area.style.display = 'flex';
+    toShow.forEach(q => {
+      const btn = document.createElement('button');
+      btn.className = 'subq-btn';
+      btn.textContent = q.q;
+      btn.onclick = () => {
+        addMsg('user', q.q);
+        botReply(q);
+        area.style.display = 'none';
+      };
+      area.appendChild(btn);
+    });
+    scrollBottom();
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // INPUT HANDLING
+  // ═══════════════════════════════════════════════════════════
+  function handleKey(e) {
+    if (e.key === 'Enter') handleSend();
+  }
+
+  function handleSend() {
+    const input = document.getElementById('user-input');
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    document.getElementById('subqs-area').style.display = 'none';
+    document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('active'));
+
+    addMsg('user', text);
+    const found = findAnswer(text);
+    if (found) {
+      botReply(found);
+    } else {
+      fallbackReply();
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // INIT
+  // ═══════════════════════════════════════════════════════════
+  function init() {
+    renderTopics();
+    // Welcome message
+    const welcome = `Olá! Sou o <strong>Assistente IA em Família</strong>. 👋<br><br>
+Estou aqui para responder às suas dúvidas sobre <em>Inteligência Artificial</em>, segurança digital e como orientar os seus filhos.<br><br>
+Escolha um tema nos botões abaixo ou escreva a sua pergunta diretamente.`;
+    addMsg('bot', welcome, true);
+  }
+
+  init();
+  </script>
+<script data-pplx-inline-edit>
+(function () {
+  if (window === window.top) return;
+
+  const allowedParentOrigins = ["https://www.perplexity.ai","https://perplexity.ai","https://testing.perplexity.ai","https://staging.perplexity.ai","https://*.preview.i.perplexity.ai","http://localhost:3000","http://127.0.0.1:3000","http://localhost:5173","http://127.0.0.1:5173"];
+  const MAX_FONT_BYTES = 500 * 1024;
+  const MAX_TOTAL_FONT_BYTES = 2 * 1024 * 1024;
+  let scrollForwarding = false;
+  let scrollRaf = 0;
+  let trustedTopOrigin = null;
+
+  // Allow entries like "https://*.preview.i.perplexity.ai" — the wildcard
+  // matches a single DNS label (no dots), so "https://*.foo" cannot stretch
+  // across multiple labels.
+  function matchesAllowedOrigin(origin) {
+    if (!origin) return false;
+    for (const entry of allowedParentOrigins) {
+      if (!entry.includes("*")) {
+        if (entry === origin) return true;
+        continue;
+      }
+      const pattern = new RegExp(
+        "^" +
+          entry.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, "[^.]+") +
+          "$",
+      );
+      if (pattern.test(origin)) return true;
+    }
+    return false;
+  }
+
+  // Trust decision: when the sender is same-origin-visible (event.origin is a
+  // real origin like https://www.perplexity.ai) we trust event.origin directly.
+  // When event.origin is "null" (opaque broker srcdoc), we fall back to the
+  // broker's stamped `parentOrigin` to identify the top window. The fallback
+  // is claim-only — we rely on the browser's native `targetOrigin` enforcement
+  // on the response path (see postToTrustedTop) to ensure replies can't be
+  // delivered to anyone but the actual top window of that claimed origin.
+  function getTrustedParentOrigin(event) {
+    const forwardedParentOrigin =
+      typeof event.data.parentOrigin === "string" ? event.data.parentOrigin : null;
+    const parentOrigin = event.origin === "null" ? forwardedParentOrigin : event.origin;
+    return matchesAllowedOrigin(parentOrigin) ? parentOrigin : null;
+  }
+
+  // All responses go to window.top with targetOrigin = the allowlisted origin.
+  // An attacker that iframes us inside their own null-origin broker can claim
+  // any parentOrigin they like, but the browser will drop the reply whenever
+  // the real top's origin doesn't match — so the screenshot never leaves.
+  function postToTrustedTop(message) {
+    if (!trustedTopOrigin) return;
+    try {
+      window.top.postMessage(message, trustedTopOrigin);
+    } catch (_error) {}
+  }
+
+  function inlineAll(original, clone) {
+    if (original.nodeType !== 1 || clone.nodeType !== 1) return;
+
+    try {
+      const computedStyle = getComputedStyle(original);
+      // cssText on a computed style is the serialized declaration in modern
+      // Chromium/Safari — a single read beats enumerating ~400 longhand
+      // properties. Firefox returns "" here, so we fall back on empty.
+      const serialized = computedStyle.cssText;
+      if (serialized) {
+        clone.style.cssText = serialized;
+      } else {
+        const parts = new Array(computedStyle.length);
+        for (let index = 0; index < computedStyle.length; index += 1) {
+          const property = computedStyle[index];
+          parts[index] = `${property}:${computedStyle.getPropertyValue(property)};`;
+        }
+        clone.style.cssText = parts.join("");
+      }
+    } catch (_error) {}
+
+    const originalChildren = original.children;
+    const clonedChildren = clone.children;
+    for (
+      let index = 0;
+      index < originalChildren.length && index < clonedChildren.length;
+      index += 1
+    ) {
+      inlineAll(originalChildren[index], clonedChildren[index]);
+    }
+  }
+
+  function extractFontUrl(srcValue) {
+    const matches = [
+      ...srcValue.matchAll(
+        /url\(["']?([^"')]+)["']?\)(?:\s*format\(["']?([^"')]+)["']?\))?/gi,
+      ),
+    ];
+    if (matches.length === 0) return null;
+    const woff2 = matches.find((m) => m[2] && m[2].toLowerCase().includes("woff2"));
+    if (woff2) return woff2[1];
+    const woff = matches.find((m) => m[2] && m[2].toLowerCase().includes("woff"));
+    if (woff) return woff[1];
+    return matches[0][1];
+  }
+
+  // Cache resolved font URL -> data URI across captures. Fonts on a page
+  // essentially never change, and a batch run emits multiple captures back to
+  // back — without this we'd refetch + re-base64 every time.
+  const fontDataUriCache = new Map();
+  const SRC_DECLARATION_RE = /src\s*:\s*[^;}]+/i;
+
+  async function fetchAsDataUri(url) {
+    if (fontDataUriCache.has(url)) return fontDataUriCache.get(url);
+    let dataUri = null;
+    try {
+      const response = await fetch(url, { mode: "cors", credentials: "omit" });
+      if (response.ok) {
+        const blob = await response.blob();
+        if (blob.size <= MAX_FONT_BYTES) {
+          dataUri = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () =>
+              resolve(typeof reader.result === "string" ? reader.result : null);
+            reader.onerror = () => resolve(null);
+            reader.readAsDataURL(blob);
+          });
+        }
+      }
+    } catch (_error) {
+      dataUri = null;
+    }
+    fontDataUriCache.set(url, dataUri);
+    return dataUri;
+  }
+
+  function collectFontFaceRuleTexts() {
+    const rules = [];
+    for (const sheet of document.styleSheets) {
+      let cssRules;
+      try {
+        cssRules = sheet.cssRules;
+      } catch (_error) {
+        continue;
+      }
+      if (!cssRules) continue;
+      for (const rule of cssRules) {
+        const cssText = rule.cssText || "";
+        if (cssText.startsWith("@font-face")) rules.push(cssText);
+      }
+    }
+    return rules;
+  }
+
+  async function buildInlinedFontCss() {
+    const ruleTexts = collectFontFaceRuleTexts();
+    if (ruleTexts.length === 0) return null;
+
+    const resolved = ruleTexts.map((cssText) => {
+      if (!SRC_DECLARATION_RE.test(cssText)) return null;
+      const srcMatch = cssText.match(/src\s*:\s*([^;}]+)[;}]/i);
+      if (!srcMatch) return null;
+      const url = extractFontUrl(srcMatch[1]);
+      if (!url) return null;
+      try {
+        return { cssText, url: new URL(url, document.baseURI).href };
+      } catch (_error) {
+        return null;
+      }
+    });
+
+    const dataUris = await Promise.all(
+      resolved.map((entry) => (entry ? fetchAsDataUri(entry.url) : Promise.resolve(null))),
+    );
+
+    const inlined = [];
+    let totalBytes = 0;
+    for (let index = 0; index < resolved.length; index += 1) {
+      const entry = resolved[index];
+      const dataUri = dataUris[index];
+      if (!entry || !dataUri) continue;
+      const approxBytes = dataUri.length * 0.75;
+      if (totalBytes + approxBytes > MAX_TOTAL_FONT_BYTES) break;
+      totalBytes += approxBytes;
+      inlined.push(entry.cssText.replace(SRC_DECLARATION_RE, `src: url("${dataUri}")`));
+    }
+    return inlined.length > 0 ? inlined.join("\n") : null;
+  }
+
+  function stripExternal(clone) {
+    const images = clone.querySelectorAll("img");
+    for (let index = 0; index < images.length; index += 1) {
+      const src = images[index].getAttribute("src");
+      if (src && !src.startsWith("data:")) images[index].removeAttribute("src");
+    }
+
+    const elements = clone.querySelectorAll("*");
+    for (let index = 0; index < elements.length; index += 1) {
+      const style = elements[index].style.cssText;
+      if (style && style.includes("url(")) {
+        elements[index].style.cssText = style.replace(
+          /url\(["']?(?!data:)[^)"']*["']?\)/gi,
+          "none",
+        );
+      }
+    }
+  }
+
+  function emitScroll() {
+    scrollRaf = 0;
+    if (!scrollForwarding) return;
+    postToTrustedTop({
+      type: "INLINE_EDIT_SCROLL",
+      scrollX: window.scrollX,
+      scrollY: window.scrollY,
+    });
+  }
+
+  window.addEventListener(
+    "scroll",
+    function () {
+      if (!scrollForwarding || scrollRaf) return;
+      scrollRaf = requestAnimationFrame(emitScroll);
+    },
+    { passive: true, capture: true },
+  );
+
+  async function handleCaptureRequest(event) {
+    const requestId = event.data.requestId;
+    const scrollX = window.scrollX;
+    const scrollY = window.scrollY;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    function postResult(dataUrl) {
+      postToTrustedTop({
+        type: "INLINE_EDIT_SCREENSHOT_RESULT",
+        requestId,
+        dataUrl,
+        scrollX,
+        scrollY,
+      });
+    }
+
+    try {
+      // Wait for any pending web fonts to resolve so both inline metrics and
+      // the @font-face inlining below see the same loaded faces.
+      if (document.fonts && document.fonts.ready) {
+        try {
+          await document.fonts.ready;
+        } catch (_error) {}
+      }
+
+      const clone = document.documentElement.cloneNode(true);
+      inlineAll(document.documentElement, clone);
+
+      const removedNodes = clone.querySelectorAll("script,link[rel=\"stylesheet\"],style");
+      for (let index = 0; index < removedNodes.length; index += 1) {
+        removedNodes[index].remove();
+      }
+
+      stripExternal(clone);
+
+      // Re-embed web fonts as data-URI @font-face rules so the SVG rasterizer
+      // can resolve them — external font URLs aren't fetched during
+      // foreignObject rendering, which would otherwise force a fallback face
+      // and change text metrics.
+      const inlinedFontCss = await buildInlinedFontCss();
+      if (inlinedFontCss) {
+        const styleEl = document.createElement("style");
+        styleEl.textContent = inlinedFontCss;
+        const head = clone.querySelector("head");
+        if (head) head.appendChild(styleEl);
+        else clone.insertBefore(styleEl, clone.firstChild);
+      }
+
+      const html = new XMLSerializer().serializeToString(clone);
+      const svg =
+        `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">` +
+        '<foreignObject width="100%" height="100%">' +
+        `<div xmlns="http://www.w3.org/1999/xhtml" style="width:${width}px;height:${height}px;overflow:hidden">` +
+        `<div style="transform:translate(-${scrollX}px,-${scrollY}px);transform-origin:top left">` +
+        html +
+        "</div></div></foreignObject></svg>";
+      const svgUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+      const image = new Image();
+      image.onload = function () {
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext("2d").drawImage(image, 0, 0);
+        postResult(canvas.toDataURL("image/png"));
+      };
+      image.onerror = function () {
+        postResult(null);
+      };
+      image.src = svgUrl;
+    } catch (_error) {
+      postResult(null);
+    }
+  }
+
+  window.addEventListener("message", function (event) {
+    if (!event.data) return;
+    // Only accept messages from the direct parent frame. Blocks sibling /
+    // unrelated-window postMessage senders that could otherwise reach us.
+    if (event.source !== window.parent) return;
+
+    const trustedParentOrigin = getTrustedParentOrigin(event);
+    if (!trustedParentOrigin) return;
+    trustedTopOrigin = trustedParentOrigin;
+
+    if (event.data.type === "INLINE_EDIT_SCROLL_START") {
+      scrollForwarding = true;
+      emitScroll();
+      return;
+    }
+
+    if (event.data.type === "INLINE_EDIT_SCROLL_STOP") {
+      scrollForwarding = false;
+      if (scrollRaf) cancelAnimationFrame(scrollRaf);
+      scrollRaf = 0;
+      return;
+    }
+
+    if (event.data.type !== "INLINE_EDIT_CAPTURE_REQUEST") return;
+
+    handleCaptureRequest(event);
+  });
+})();
+
+
+</script></body>
+</html>
