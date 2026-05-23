@@ -443,6 +443,7 @@
       letter-spacing:-.035em;
       font-weight:900;
       max-width:900px;
+      color:var(--white);
     }
 
     .conversation{
@@ -470,9 +471,85 @@
     }
     .footer-card h2{margin-bottom:12px}
     .footer-card p{max-width:760px;margin:0 auto;color:var(--muted);font-size:1.08rem}
+
+    .footer-card .quote p{
+      color:var(--white);
+      font-weight:900;
+      opacity:1;
+    }
+
+    .footer-card .quote p strong{
+      color:var(--white);
+      font-weight:900;
+    }
+
     .signature{
       margin-top:24px;
       color:var(--navy);
+      font-weight:800;
+    }
+
+    .paldim-footer{
+      background:var(--navy);
+      color:var(--white);
+      padding:44px 24px;
+      margin-top:34px;
+      border-top:6px solid var(--teal);
+    }
+
+    .paldim-footer-inner{
+      max-width:960px;
+      margin:0 auto;
+      text-align:center;
+    }
+
+    .paldim-footer p{
+      margin:0;
+    }
+
+    .paldim-footer-kicker{
+      font-weight:900;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      font-size:.88rem;
+      color:var(--yellow);
+      margin-bottom:14px;
+    }
+
+    .paldim-footer-description{
+      font-size:1.05rem;
+      line-height:1.6;
+      color:rgba(255,255,255,.9);
+      margin-bottom:14px;
+    }
+
+    .paldim-footer-context{
+      font-size:.98rem;
+      line-height:1.6;
+      color:rgba(255,255,255,.78);
+      margin-bottom:20px;
+    }
+
+    .paldim-footer-authorship{
+      font-size:.98rem;
+      line-height:1.6;
+      color:rgba(255,255,255,.82);
+      margin-bottom:18px;
+    }
+
+    .paldim-footer-authorship strong{
+      color:var(--white);
+      font-weight:900;
+    }
+
+    .paldim-footer-privacy{
+      display:inline-block;
+      color:var(--navy);
+      background:var(--mint);
+      padding:10px 16px;
+      border-radius:999px;
+      font-size:.9rem;
+      line-height:1.45;
       font-weight:800;
     }
 
@@ -497,6 +574,8 @@
       .btn{width:100%}
       .nav{border-radius:22px}
       h1{font-size:2.15rem}
+      .paldim-footer{padding:36px 18px}
+      .paldim-footer-privacy{border-radius:18px}
     }
 
     @media print{
@@ -524,9 +603,12 @@
             <a class="btn secondary" href="#faq">Perguntas frequentes</a>
             <a class="btn secondary" href="#experimentar">Experimentar em família</a>
             <a class="btn primary" href="quiz.html">Fazer o Quiz em Família</a>
-            <a class="btn secondary" href="chatbot-pais.html">Abrir Assistente para Pais</a>
+            <a class="btn primary" href="chatbot-pais.html">Usar o Chatbot para Pais</a>
           </div>
-          <p class="credit">Professora e formadora Ana Margarida Fonseca<br>No âmbito da AEI8 – PALDIM | TEIP4</p>
+          <p class="credit">
+            Recurso educativo desenvolvido no âmbito da AEI8 – PALDIM | TEIP4<br>
+            Conceção pedagógica, estruturação de conteúdos e desenvolvimento: Ana Margarida Fonseca
+          </p>
         </div>
         <div class="hero-card" aria-hidden="true">
           <div class="family-visual">
@@ -874,14 +956,35 @@
       <h2>Uma ideia para levar consigo hoje</h2>
       <p>A IA não substitui o papel das famílias. Torna-o ainda mais importante.</p>
       <div class="quote" style="margin-top:24px">
-        <p>Informar para acompanhar. Acompanhar para proteger. Proteger para aprender melhor.</p>
-      </div>
-      <div class="signature">
-        Professora e formadora Ana Margarida Fonseca<br>
-        No âmbito da AEI8 – PALDIM | TEIP4
+        <p><strong>Informar para acompanhar. Acompanhar para proteger. Proteger para aprender melhor.</strong></p>
       </div>
     </section>
   </main>
+
+  <footer class="paldim-footer" aria-label="Informação sobre o projeto">
+    <div class="paldim-footer-inner">
+      <p class="paldim-footer-kicker">IA em Família | AEI8 – PALDIM | TEIP4</p>
+
+      <p class="paldim-footer-description">
+        Recurso educativo para pais e encarregados de educação sobre Inteligência Artificial,
+        literacia digital, segurança online e acompanhamento familiar.
+      </p>
+
+      <p class="paldim-footer-context">
+        Desenvolvido no âmbito do plano de ação de literacia digital, inteligência artificial
+        e cidadania digital associado à AEI8 – PALDIM | TEIP4.
+      </p>
+
+      <p class="paldim-footer-authorship">
+        Conceção pedagógica, estruturação de conteúdos e desenvolvimento:<br>
+        <strong>Ana Margarida Fonseca — Professora e Formadora</strong>
+      </p>
+
+      <p class="paldim-footer-privacy">
+        Recurso estático, sem login, sem recolha de dados, sem tracking e sem backend.
+      </p>
+    </div>
+  </footer>
 
   <div class="bottombar"></div>
 
